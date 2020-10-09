@@ -4,5 +4,5 @@ const { test } = require('tap')
 const hmac = require('.')
 
 test('Test Message Matches', async ({ equal }) => {
-  equal(hmac.testMessage, 'Hello Worlds', 'Matching Test message')
+  equal(hmac.testMessage, 'Hello World', 'Matching Test message')
 })
