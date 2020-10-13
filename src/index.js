@@ -1,2 +1,6 @@
 'use strict'
-module.exports = { testMessage: 'Hello World' }
+
+module.exports = {
+  testMessage: 'Hello World'
+
+}
