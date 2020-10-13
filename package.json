@@ -1,0 +1,42 @@
+{
+  "name": "ietf-hmac-signatures",
+  "version": "0.0.1",
+  "description": "Methods to construct and verify HMAC signatures based on the IETF draft standard",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "tap -R classic -j1",
+    "lint": "standard",
+    "fix": "standard --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/autotelic/ietf-hmac-signatures.git"
+  },
+  "keywords": [
+    "hmac",
+    "security"
+  ],
+  "author": "Autotelic Development Ltd <info@autotelic.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 12.18.4"
+  },
+  "bugs": {
+    "url": "https://github.com/autotelic/ietf-hmac-signatures/issues"
+  },
+  "homepage": "https://github.com/autotelic/ietf-hmac-signatures#readme",
+  "devDependencies": {
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "standard": "^14.3.4",
+    "tap": "^14.10.8"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "npm run fix"
+  }
+}
