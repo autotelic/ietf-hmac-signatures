@@ -1,7 +1,6 @@
 'use strict'
 
 const crypto = require('crypto')
-// const parseSignatureHeader = require('./parseSignatureHeader')
 
 const constructSignatureString = (req, options) =>
   calculateSignature({
@@ -12,7 +11,6 @@ const constructSignatureString = (req, options) =>
   })
 
 const getMessage = (req, options) => {
-  // const signature = options.signatureMaterial ? options.signatureMaterial : parseSignatureHeader(req)
   const { signatureMaterial } = options
   const { headers, method, url } = req
   const parsedUrl = new URL(url)

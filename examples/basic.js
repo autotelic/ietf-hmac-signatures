@@ -2,7 +2,7 @@
 
 const fetch = require('cross-fetch')
 
-const { signRequest } = require('../src')
+const { signRequest, getAlgorithm } = require('../src')
 
 // const {
 //   constructSignatureString,
@@ -10,10 +10,10 @@ const { signRequest } = require('../src')
 // } = require('../src')
 const DEFAULT_ENCODING = 'base64'
 
-const pluginOptions = {
+const options = {
   // constructSignatureString,
   // extractSignature,
-  getAlgorithm: () => 'sha512',
+  getAlgorithm,
   getSignatureEncoding: () => DEFAULT_ENCODING,
   sharedSecret: 'topSecret',
   algorithmMap: {
@@ -53,20 +53,20 @@ const pluginOptions = {
   try {
     const req = new fetch.Request('http://localhost:3000/?id=1', {
       method: 'POST',
-      body: JSON.stringify({ hello: 'world' })
+      body: JSON.stringify({ hello: 'world' }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
-    // console.log(req)
-    // req.body = JSON.stringify({ hello: 'world' })
-    // req.headers = {}
-    req.headers.set('Content-Type', 'application/json')
-    // req.headers.set('Digest', 'sha-512=+PtokCNHosgo04ww4cNhd4yJxhMjLzWjDAKtKwQZDT4Ef9v/PrS/+BQLX4IX5dZkUMK/tQo7Uyc68RkhNyCZVg==')
 
-    pluginOptions.signatureMaterial = {
+    options.signatureMaterial = {
       headers: ['(request-target)', '(created)', '(expires)', 'host', 'digest', 'content-type'],
-      expires: 1402170895
+      keyId: 'test-key-a',
+      algorithmName: 'hs2019',
+      expiryOffset: 300000 // Optional
     }
 
-    const signedReq = signRequest(req, pluginOptions)
+    const signedReq = signRequest(req, options)
     // console.log('\n\n ********* \n\n Request is:\n', signedReq)
     // console.log('\n\n ********* \n\n Request is:\n', signedReq.headers)
 
