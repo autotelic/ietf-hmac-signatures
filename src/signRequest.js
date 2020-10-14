@@ -2,25 +2,35 @@
 
 const signRequest = (req, options) => {
   const {
-    signatureMaterial,
+    keyId,
+    algorithmName,
     expiryOffset = 300000,
     constructSignatureString = require('./constructSignatureString'),
-    constructDigestString = require('./constructDigestString')
+    constructDigestString = require('./constructDigestString'),
+    signedHeaders
   } = options
 
-  const { keyId, algorithmName } = signatureMaterial
-
-  signatureMaterial.created = Date.now()
-
-  if (signatureMaterial.headers.includes('(expires)')) {
-    signatureMaterial.expires = signatureMaterial.created + expiryOffset
+  if (!keyId || typeof keyId !== 'string') {
+    throw new Error('keyId in options object is missing or not a string')
+  }
+  if (!algorithmName || typeof algorithmName !== 'string') {
+    throw new Error('algorithmName in options object is missing or not a string')
+  }
+  if (!signedHeaders || !Array.isArray(signedHeaders) || signedHeaders.length < 1) {
+    throw new Error('signedHeaders must be an array with at least one value')
   }
 
-  if (signatureMaterial.headers.includes('digest')) {
+  options.created = Date.now()
+
+  if (signedHeaders.includes('(expires)')) {
+    options.expires = options.created + expiryOffset
+  }
+
+  if (signedHeaders.includes('digest')) {
     req.headers.set('digest', constructDigestString(req, options))
   }
 
-  req.headers.set('Signature', `keyId="${keyId}", algorithm="${algorithmName}", headers="${signatureMaterial.headers.join(' ')}", signature="${constructSignatureString(req, options)}", created=${signatureMaterial.created}${signatureMaterial.expires ? `, expires=${signatureMaterial.expires}` : ''}`)
+  req.headers.set('Signature', `keyId="${keyId}", algorithm="${algorithmName}", headers="${signedHeaders.join(' ')}", signature="${constructSignatureString(req, options)}", created=${options.created}${options.expires ? `, expires=${options.expires}` : ''}`)
 
   return req
 }

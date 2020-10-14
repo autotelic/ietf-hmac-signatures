@@ -3,7 +3,7 @@
 const crypto = require('crypto')
 
 const constructDigestString = (req, options) => {
-  const { digestEncoding, digestAlgorithm } = options
+  const { digestEncoding = 'base64', digestAlgorithm = 'sha-512' } = options
   const formattedAlgorithm = digestAlgorithm.toLowerCase().split('-').join('')
   const { body } = req
 
