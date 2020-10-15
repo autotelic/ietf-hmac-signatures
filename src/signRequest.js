@@ -4,7 +4,7 @@ const signRequest = (req, options) => {
   const {
     keyId,
     algorithmName,
-    expiryOffset = 300000,
+    expiryOffset = 300,
     constructSignatureString = require('./constructSignatureString'),
     constructDigestString = require('./constructDigestString'),
     signedHeaders
@@ -20,7 +20,7 @@ const signRequest = (req, options) => {
     throw new Error('signedHeaders must be an array with at least one value')
   }
 
-  options.created = Date.now()
+  options.created = Math.floor(Date.now() / 1000)
 
   if (signedHeaders.includes('(expires)')) {
     options.expires = options.created + expiryOffset
