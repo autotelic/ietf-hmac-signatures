@@ -2,7 +2,7 @@
 
 const getAlgorithm = (req, { algorithmMap, keyId, algorithmName }) => {
   if (!algorithmMap) {
-    throw new Error('missing algorithmMap in options')
+    throw new Error('Missing algorithmMap in options')
   }
 
   if (!algorithmMap[algorithmName]) {

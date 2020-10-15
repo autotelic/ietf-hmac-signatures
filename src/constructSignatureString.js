@@ -41,7 +41,7 @@ const getMessage = (req, options) => {
           if (!headers[signatureHeader]) {
             throw new Error(`Header ${signatureHeader} does not exist in the request`)
           }
-          return `${signatureHeader}: ${headers[signatureHeader]}`
+          return `${signatureHeader.toLowerCase()}: ${headers[signatureHeader]}`
       }
     }).join('\n')
 }

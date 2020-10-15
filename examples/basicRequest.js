@@ -53,7 +53,7 @@ const { createSignRequest } = require('../src')
       headers: {}
     }
 
-    const fetchSignedReq = signRequest(fetchReq, { signedHeaders: ['(request-target)', '(created)', 'host'] })
+    const fetchSignedReq = signRequest(fetchReq, { signedHeaders: ['(request-target)', '(created)', 'host'], keyId: 'test-key-a' })
 
     console.log(fetchSignedReq)
 
