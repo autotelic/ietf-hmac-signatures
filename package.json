@@ -6,7 +6,8 @@
   "scripts": {
     "test": "tap -R classic -j1",
     "lint": "standard",
-    "fix": "standard --fix"
+    "fix": "standard --fix",
+    "example:basicServer": "fastify start examples/basicServer.js --watch --log-level debug"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,9 @@
   },
   "homepage": "https://github.com/autotelic/ietf-hmac-signatures#readme",
   "devDependencies": {
+    "@autotelic/fastify-hmac": "^0.2.1",
     "cross-fetch": "^3.0.6",
+    "fastify-cli": "^2.3.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
     "standard": "^14.3.4",
