@@ -14,7 +14,11 @@ async function app (fastify, options) {
   })
 
   fastify.post('/foo', async (request, reply) => {
-    reply.send({ foo: 'bar' })
+    reply.send({ foo: 'post' })
+  })
+
+  fastify.get('/foo', async (request, reply) => {
+    reply.send({ foo: 'get' })
   })
 }
 

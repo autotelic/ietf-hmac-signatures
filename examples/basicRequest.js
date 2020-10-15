@@ -15,9 +15,9 @@ const { createSignRequest } = require('../src')
           'test-key-b': 'sha256'
         }
       },
-      signedHeaders: ['(request-target)', '(created)', '(expires)', 'host', 'digest', 'content-type'],
       keyId: 'test-key-b',
-      algorithmName: 'hs2019'
+      algorithmName: 'hs2019',
+      signedHeaders: ['(request-target)', '(created)', '(expires)', 'host', 'digest', 'content-type']
       // expiryOffset: 300, // Optional - Default is 300 seconds (5 min) if unspecified
       // digestEncoding: 'base64', // Optional - Default is base64 if unspecified
       // digestAlgorithm: 'sha-512' // Optional - Default is sha-512 if unspecified
@@ -28,7 +28,7 @@ const { createSignRequest } = require('../src')
 
     const signRequest = createSignRequest(options)
 
-    const req = {
+    const axiosReq = {
       url: 'http://localhost:3000/foo',
       method: 'POST',
       body: JSON.stringify({ hello: 'world' }),
@@ -37,7 +37,7 @@ const { createSignRequest } = require('../src')
       }
     }
 
-    const signedReq = signRequest(req)
+    const signedReq = signRequest(axiosReq)
     const { body: data, ...rest } = signedReq
 
     console.log(signedReq)
@@ -47,11 +47,17 @@ const { createSignRequest } = require('../src')
     console.log('\n\nAxios Response Message: ', axiosRes.data)
     console.log('\n\n******************\n\n')
 
-    const badSignedReq = signRequest(req, { sharedSecret: 'differentSecret' })
+    const fetchReq = {
+      url: 'http://localhost:3000/foo',
+      method: 'GET',
+      headers: {}
+    }
 
-    console.log(badSignedReq)
+    const fetchSignedReq = signRequest(fetchReq, { signedHeaders: ['(request-target)', '(created)', 'host'] })
 
-    const res = await fetch(badSignedReq.url, badSignedReq)
+    console.log(fetchSignedReq)
+
+    const res = await fetch(fetchSignedReq.url, fetchSignedReq)
 
     const message = await res.json()
     console.log('\n\nFetch Response Message: ', message)
