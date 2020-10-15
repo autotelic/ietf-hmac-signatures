@@ -1,11 +1,11 @@
 'use strict'
 
-const signRequest = require('./signRequest')
+const createSignRequest = require('./createSignRequest')
 const getAlgorithm = require('./getAlgorithm')
 
 module.exports = {
   testMessage: 'Hello World',
-  signRequest,
+  createSignRequest,
   getAlgorithm
 
 }

@@ -38,10 +38,10 @@ const getMessage = (req, options) => {
         case 'host':
           return `host: ${parsedUrl.host}`
         default:
-          if (!headers.get(signatureHeader)) {
+          if (!headers[signatureHeader]) {
             throw new Error(`Header ${signatureHeader} does not exist in the request`)
           }
-          return `${signatureHeader}: ${headers.get(signatureHeader)}`
+          return `${signatureHeader}: ${headers[signatureHeader]}`
       }
     }).join('\n')
 }

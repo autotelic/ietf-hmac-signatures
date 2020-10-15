@@ -1,19 +1,12 @@
 'use strict'
 
 const fetch = require('cross-fetch')
+const axios = require('axios')
 
-const { signRequest } = require('../src')
+const { createSignRequest } = require('../src')
 
 ;(async () => {
   try {
-    const req = new fetch.Request('http://localhost:3000/foo', {
-      method: 'POST',
-      body: JSON.stringify({ hello: 'world' }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-
     const options = {
       sharedSecret: 'topSecret',
       algorithmMap: {
@@ -33,12 +26,35 @@ const { signRequest } = require('../src')
       // constructDigestString: (req, options) => {}, // Optional - Default constructDigestString used if unspecified
     }
 
-    const signedReq = signRequest(req, options)
+    const signRequest = createSignRequest(options)
 
-    const res = await fetch(signedReq)
+    const req = {
+      url: 'http://localhost:3000/foo',
+      method: 'POST',
+      body: JSON.stringify({ hello: 'world' }),
+      headers: {
+        'content-type': 'application/json'
+      }
+    }
+
+    const signedReq = signRequest(req)
+    const { body: data, ...rest } = signedReq
+
+    console.log(signedReq)
+
+    const axiosRes = await axios({ data, ...rest })
+
+    console.log('\n\nAxios Response Message: ', axiosRes.data)
+    console.log('\n\n******************\n\n')
+
+    const badSignedReq = signRequest(req, { sharedSecret: 'differentSecret' })
+
+    console.log(badSignedReq)
+
+    const res = await fetch(badSignedReq.url, badSignedReq)
 
     const message = await res.json()
-    console.log('\n\nResponse Message: ', message)
+    console.log('\n\nFetch Response Message: ', message)
     console.log('\n\n******************\n\n')
   } catch (error) {
     console.error(error)
