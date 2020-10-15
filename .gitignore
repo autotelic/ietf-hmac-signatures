@@ -111,3 +111,6 @@ dist
 
 # nvm
 .nvmrc
+
+# Mac OS
+.DS_Store

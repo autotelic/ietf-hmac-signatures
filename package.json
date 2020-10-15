@@ -28,6 +28,7 @@
   "homepage": "https://github.com/autotelic/ietf-hmac-signatures#readme",
   "devDependencies": {
     "@autotelic/fastify-hmac": "^0.2.1",
+    "axios": "^0.20.0",
     "cross-fetch": "^3.0.6",
     "fastify-cli": "^2.3.0",
     "husky": "^4.3.0",
