@@ -2,31 +2,70 @@
 
 const fetch = require('cross-fetch')
 const axios = require('axios')
+const http = require('http')
 
 const { createSignRequest } = require('../src')
 
+const options = {
+  sharedSecret: 'topSecret',
+  algorithmMap: {
+    hs2019: {
+      'test-key-a': 'sha512',
+      'test-key-b': 'sha256'
+    }
+  },
+  keyId: 'test-key-b',
+  algorithmName: 'hs2019',
+  signedHeaders: ['(request-target)', '(created)', '(expires)', 'host', 'digest', 'content-type']
+  // expiryOffset: 300, // Optional - Default is 300 seconds (5 min) if unspecified
+  // digestEncoding: 'base64', // Optional - Default is base64 if unspecified
+  // digestAlgorithm: 'sha-512' // Optional - Default is sha-512 if unspecified
+  // getAlgorithm: (req, options) => 'sha512', // Optional - Default getAlgorithm used if unspecified
+  // constructSignatureString: (req, options) => {}, // Optional - Default constructSignatureString used if unspecified
+  // constructDigestString: (req, options) => {}, // Optional - Default constructDigestString used if unspecified
+}
+
 ;(async () => {
   try {
-    const options = {
-      sharedSecret: 'topSecret',
-      algorithmMap: {
-        hs2019: {
-          'test-key-a': 'sha512',
-          'test-key-b': 'sha256'
-        }
-      },
-      keyId: 'test-key-b',
-      algorithmName: 'hs2019',
-      signedHeaders: ['(request-target)', '(created)', '(expires)', 'host', 'digest', 'content-type']
-      // expiryOffset: 300, // Optional - Default is 300 seconds (5 min) if unspecified
-      // digestEncoding: 'base64', // Optional - Default is base64 if unspecified
-      // digestAlgorithm: 'sha-512' // Optional - Default is sha-512 if unspecified
-      // getAlgorithm: (req, options) => 'sha512', // Optional - Default getAlgorithm used if unspecified
-      // constructSignatureString: (req, options) => {}, // Optional - Default constructSignatureString used if unspecified
-      // constructDigestString: (req, options) => {}, // Optional - Default constructDigestString used if unspecified
+    const signRequest = createSignRequest(options)
+
+    const req1 = {
+      url: 'http://localhost:3000/foo',
+      method: 'POST',
+      body: JSON.stringify({ hello: 'world' }),
+      headers: {
+        'content-type': 'application/json'
+      }
     }
 
-    const signRequest = createSignRequest(options)
+    const signedReq1 = signRequest(req1)
+
+    const res1 = await fetch(signedReq1.url, signedReq1)
+
+    const message1 = await res1.json()
+
+    console.log('\n\nResponse Message 1: ', message1)
+    console.log('\n\n******************\n\n')
+
+    const req2 = {
+      url: 'http://localhost:3000/foo',
+      method: 'GET',
+      headers: {}
+    }
+
+    // Overriding Options
+    const req2Options = {
+      signedHeaders: ['(request-target)', '(created)', 'host'],
+      keyId: 'test-key-a'
+    }
+
+    const signedReq2 = signRequest(req2, req2Options)
+
+    const res2 = await fetch(signedReq2.url, signedReq2)
+
+    const message2 = await res2.json()
+    console.log('\n\nResponse Message 2: ', message2)
+    console.log('\n\n******************\n\n')
 
     const axiosReq = {
       url: 'http://localhost:3000/foo',
@@ -37,32 +76,84 @@ const { createSignRequest } = require('../src')
       }
     }
 
-    const signedReq = signRequest(axiosReq)
-    const { body: data, ...rest } = signedReq
+    const signedReq3 = signRequest(axiosReq)
+    const { body: data, ...rest } = signedReq3
 
-    console.log(signedReq)
+    // console.log(signedReq3)
 
     const axiosRes = await axios({ data, ...rest })
 
     console.log('\n\nAxios Response Message: ', axiosRes.data)
     console.log('\n\n******************\n\n')
 
-    const fetchReq = {
+    const httpReq = {
       url: 'http://localhost:3000/foo',
       method: 'GET',
       headers: {}
     }
 
-    const fetchSignedReq = signRequest(fetchReq, { signedHeaders: ['(request-target)', '(created)', 'host'], keyId: 'test-key-a' })
+    // Overriding Options
+    const signingOptions = {
+      signedHeaders: ['(request-target)', '(created)', 'host'],
+      keyId: 'test-key-a'
+    }
 
-    console.log(fetchSignedReq)
+    const signedReq4 = signRequest(httpReq, signingOptions)
 
-    const res = await fetch(fetchSignedReq.url, fetchSignedReq)
+    // console.log(signedReq4)
 
-    const message = await res.json()
-    console.log('\n\nFetch Response Message: ', message)
-    console.log('\n\n******************\n\n')
+    const req = http.request(signedReq4.url, signedReq4, res => {
+      console.log(`HTTP Request statusCode: ${res.statusCode}`)
+
+      res.on('data', d => {
+        console.log('HTTP Request data')
+        process.stdout.write(d)
+        console.log('\n\n******************\n\n')
+      })
+    })
+
+    req.on('error', error => {
+      console.error(error)
+    })
+
+    req.end()
   } catch (error) {
     console.error(error)
   }
 })()
+
+// ;(async () => {
+//   const signRequest = createSignRequest(options)
+
+//   const httpReq = {
+//     url: 'http://localhost:3000/foo',
+//     method: 'GET',
+//     headers: {}
+//   }
+
+//   // Overriding Options
+//   const signingOptions = {
+//     signedHeaders: ['(request-target)', '(created)', 'host'],
+//     keyId: 'test-key-a'
+//   }
+
+//   const signedReq = signRequest(httpReq, signingOptions)
+
+//   console.log(signedReq)
+
+//   const req = http.request(signedReq.url, signedReq, res => {
+//     console.log(`statusCode: ${res.statusCode}`)
+
+//     res.on('data', d => {
+//       process.stdout.write(d)
+//     })
+//   })
+
+//   req.on('error', error => {
+//     console.error(error)
+//   })
+
+//   req.end()
+
+//   console.log('\n\n******************\n\n')
+// })()
