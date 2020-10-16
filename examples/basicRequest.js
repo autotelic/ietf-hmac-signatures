@@ -29,6 +29,7 @@ const options = {
   try {
     const signRequest = createSignRequest(options)
 
+    // Example req 1 using fetch API
     const req1 = {
       url: 'http://localhost:3000/foo',
       method: 'POST',
@@ -47,6 +48,7 @@ const options = {
     console.log('\n\nResponse Message 1: ', message1)
     console.log('\n\n******************\n\n')
 
+    // Example req 2 using fetch API
     const req2 = {
       url: 'http://localhost:3000/foo',
       method: 'GET',
@@ -67,6 +69,7 @@ const options = {
     console.log('\n\nResponse Message 2: ', message2)
     console.log('\n\n******************\n\n')
 
+    // Example req 3 using axios API
     const axiosReq = {
       url: 'http://localhost:3000/foo',
       method: 'POST',
@@ -80,12 +83,12 @@ const options = {
     const { body: data, ...rest } = signedReq3
 
     // console.log(signedReq3)
-
     const axiosRes = await axios({ data, ...rest })
 
     console.log('\n\nAxios Response Message: ', axiosRes.data)
     console.log('\n\n******************\n\n')
 
+    // Example req 4 using Node HTTP API
     const httpReq = {
       url: 'http://localhost:3000/foo',
       method: 'GET',
@@ -121,39 +124,3 @@ const options = {
     console.error(error)
   }
 })()
-
-// ;(async () => {
-//   const signRequest = createSignRequest(options)
-
-//   const httpReq = {
-//     url: 'http://localhost:3000/foo',
-//     method: 'GET',
-//     headers: {}
-//   }
-
-//   // Overriding Options
-//   const signingOptions = {
-//     signedHeaders: ['(request-target)', '(created)', 'host'],
-//     keyId: 'test-key-a'
-//   }
-
-//   const signedReq = signRequest(httpReq, signingOptions)
-
-//   console.log(signedReq)
-
-//   const req = http.request(signedReq.url, signedReq, res => {
-//     console.log(`statusCode: ${res.statusCode}`)
-
-//     res.on('data', d => {
-//       process.stdout.write(d)
-//     })
-//   })
-
-//   req.on('error', error => {
-//     console.error(error)
-//   })
-
-//   req.end()
-
-//   console.log('\n\n******************\n\n')
-// })()

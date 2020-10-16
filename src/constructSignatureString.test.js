@@ -20,13 +20,14 @@ const defaultRequest = {
   method: 'GET'
 }
 
+// TODO(jeff-sexton): Add more tests to get to 100%
 test('Constructs a signature string from the incoming request', async ({
   equal
 }) => {
   const tests = [
     {
       description:
-        'Valid signature constructed when a basic Get request is provided',
+        'Matching signature constructed when a basic GET request is provided',
       input: defaultRequest,
       options: {
         ...defaultOptions,
@@ -37,7 +38,7 @@ test('Constructs a signature string from the incoming request', async ({
     },
     {
       description:
-        'Matching signature constructed when a valid request is provided',
+        'Matching signature constructed when a POST request is provided with a digest header',
       input: {
         ...defaultRequest,
         method: 'POST',

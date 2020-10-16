@@ -4,6 +4,12 @@
 
 Methods to construct and verify HMAC signatures based on the [IETF draft standards][1].
 
+## Methods
+
+<!-- TODO(jeff-sexton): Add documentation for methods -->
+
+**TODO**
+
 ### License
 
 MIT
