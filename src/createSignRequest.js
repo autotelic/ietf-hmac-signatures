@@ -1,17 +1,27 @@
 'use strict'
-const createSignRequest = (defaultSignatureOptions) => (req, options) => {
+const constructSignatureString = require('./constructSignatureString')
+const constructDigestString = require('./constructDigestString')
+
+const createSignRequest = (creationOptions) => (req, options) => {
   const combinedOptions = {
-    ...defaultSignatureOptions,
+    constructSignatureString,
+    constructDigestString,
+    signedHeaders: ['(request-target)', '(created)'],
+    expiryOffset: 300,
+    ...creationOptions,
     ...options
+  }
+
+  const workingReq = {
+    headers: {},
+    ...req
   }
 
   const {
     keyId,
     algorithmName,
-    expiryOffset = 300,
-    constructSignatureString = require('./constructSignatureString'),
-    constructDigestString = require('./constructDigestString'),
-    signedHeaders
+    signedHeaders,
+    expiryOffset
   } = combinedOptions
 
   if (!keyId || typeof keyId !== 'string') {
@@ -24,7 +34,6 @@ const createSignRequest = (defaultSignatureOptions) => (req, options) => {
     throw new Error('signedHeaders must be an array with at least one value')
   }
 
-  // TODO(jeff-sexton): Process signedHeaders passed in to ensure it has at least (created) in it. Configure to automatically add (request-target) (created) and optionally (expired) instead of being user config?
   combinedOptions.created = Math.floor(Date.now() / 1000)
 
   if (signedHeaders.includes('(expires)')) {
@@ -32,12 +41,12 @@ const createSignRequest = (defaultSignatureOptions) => (req, options) => {
   }
 
   if (signedHeaders.includes('digest')) {
-    req.headers.digest = constructDigestString(req, combinedOptions)
+    workingReq.headers.digest = constructDigestString(workingReq, combinedOptions)
   }
 
-  req.headers.Signature = `keyId="${keyId}", algorithm="${algorithmName}", headers="${signedHeaders.join(' ')}", signature="${constructSignatureString(req, combinedOptions)}", created=${combinedOptions.created}${combinedOptions.expires ? `, expires=${combinedOptions.expires}` : ''}`
+  workingReq.headers.Signature = `keyId="${keyId}", algorithm="${algorithmName}", headers="${signedHeaders.join(' ')}", signature="${constructSignatureString(workingReq, combinedOptions)}", created=${combinedOptions.created}${combinedOptions.expires ? `, expires=${combinedOptions.expires}` : ''}`
 
-  return req
+  return workingReq
 }
 
 module.exports = createSignRequest
