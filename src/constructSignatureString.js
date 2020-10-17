@@ -1,6 +1,6 @@
 'use strict'
 
-const crypto = require('crypto')
+const calculateCrypto = require('./calculateCrypto')
 
 const constructSignatureString = (req, options) => {
   const {
@@ -13,7 +13,8 @@ const constructSignatureString = (req, options) => {
     throw new Error('Missing shared secret in options')
   }
 
-  return calculateSignature({
+  return calculateCrypto({
+    method: 'hmac',
     algorithm: getAlgorithm(req, options),
     sharedSecret: sharedSecret,
     message: getMessage(req, options),
@@ -45,12 +46,5 @@ const getMessage = (req, options) => {
       }
     }).join('\n')
 }
-
-const calculateSignature = ({ algorithm, sharedSecret, message, encoding }) =>
-  crypto
-    .createHmac(algorithm, sharedSecret)
-    .update(message)
-    .digest(encoding)
-    .toString()
 
 module.exports = constructSignatureString
