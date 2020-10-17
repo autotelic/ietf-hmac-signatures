@@ -8,6 +8,8 @@ const createSignRequest = (creationOptions) => (req, options) => {
     constructDigestString,
     signedHeaders: ['(request-target)', '(created)'],
     expiryOffset: 300,
+    digestEncoding: 'base64',
+    digestAlgorithm: 'sha-512',
     ...creationOptions,
     ...options
   }
@@ -21,7 +23,8 @@ const createSignRequest = (creationOptions) => (req, options) => {
     keyId,
     algorithmName,
     signedHeaders,
-    expiryOffset
+    expiryOffset,
+    digestAlgorithm
   } = combinedOptions
 
   if (!keyId || typeof keyId !== 'string') {
@@ -41,7 +44,7 @@ const createSignRequest = (creationOptions) => (req, options) => {
   }
 
   if (signedHeaders.includes('digest')) {
-    workingReq.headers.digest = constructDigestString(workingReq, combinedOptions)
+    workingReq.headers.digest = `${digestAlgorithm}=${constructDigestString(workingReq, combinedOptions)}`
   }
 
   workingReq.headers.Signature = `keyId="${keyId}", algorithm="${algorithmName}", headers="${signedHeaders.join(' ')}", signature="${constructSignatureString(workingReq, combinedOptions)}", created=${combinedOptions.created}${combinedOptions.expires ? `, expires=${combinedOptions.expires}` : ''}`

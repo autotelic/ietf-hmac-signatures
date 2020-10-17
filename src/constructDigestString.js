@@ -7,14 +7,12 @@ const constructDigestString = (req, options) => {
   const formattedAlgorithm = digestAlgorithm.toLowerCase().split('-').join('')
   const { body } = req
 
-  const calculatedDigest = calculateCrypto({
+  return calculateCrypto({
     method: 'hash',
     algorithm: formattedAlgorithm,
     message: body,
     encoding: digestEncoding
   })
-
-  return `${digestAlgorithm}=${calculatedDigest}`
 }
 
 module.exports = constructDigestString
