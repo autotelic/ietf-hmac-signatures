@@ -7,7 +7,6 @@ const {
   SPACE,
   COMMA
 } = require('./constants')
-const processor = require('./processor')
 
 function joinField (key, value) {
   return `${key}"${value}"`
@@ -24,25 +23,14 @@ function signatureHeaderInputReducer (accumulator, [key, value]) {
 module.exports = function constructSignatureString (request, opts) {
   const {
     secret,
-    extractors,
-    transformers,
     constructSignature,
-    signatureFields,
     keyId,
-    algorithm
+    algorithm,
+    fields
   } = opts
-  const headers = signatureFields.map(
-    (field) => processor(
-      request,
-      field,
-      extractors,
-      transformers
-    )
-  )
-  const signedHeaders = headers.reduce(signatureHeaderInputReducer, '').trim()
+  const signedHeaders = fields.reduce(signatureHeaderInputReducer, '').trim()
   const signature = constructSignature(secret, signedHeaders)
-
-  const headerField = joinField(HEADERS_FIELD_PREFIX, headers.reduce(headerFieldReducer, '').trim())
+  const headerField = joinField(HEADERS_FIELD_PREFIX, fields.reduce(headerFieldReducer, '').trim())
   const keyIdField = joinField(KEY_ID_FIELD_PREFIX, keyId)
   const algorithmField = joinField(ALGORITHM_FIELD_PREFIX, algorithm)
   const signatureField = joinField(SIGNATURE_FIELD_PREFIX, signature)
