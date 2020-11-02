@@ -27,22 +27,28 @@ const getMessage = (req, options) => {
   const { headers, method, url } = req
   const parsedUrl = new URL(url)
 
+  // Format Header Object keys to be lower case for compatibility
+  const formattedHeaders = Object.keys(headers).reduce((acc, header) => {
+    acc[header.toLowerCase()] = headers[header]
+    return acc
+  }, {})
+
   return signedHeaders
     .map((signatureHeader) => {
-      switch (signatureHeader) {
-        case '(request-target)':
+      switch (signatureHeader.toLowerCase()) {
+        case '(request-target)' || 'request-target':
           return `(request-target): ${method.toLowerCase()} ${parsedUrl.pathname + parsedUrl.search}`
-        case '(created)':
+        case '(created)' || 'created':
           return `(created): ${parseInt(created)}`
-        case '(expires)':
+        case '(expires)' || 'expires':
           return `(expires): ${parseInt(expires)}`
         case 'host':
           return `host: ${parsedUrl.host}`
         default:
-          if (!headers[signatureHeader]) {
+          if (!formattedHeaders[signatureHeader]) {
             throw new Error(`Header ${signatureHeader} does not exist in the request`)
           }
-          return `${signatureHeader.toLowerCase()}: ${headers[signatureHeader]}`
+          return `${signatureHeader}: ${formattedHeaders[signatureHeader]}`
       }
     }).join('\n')
 }
