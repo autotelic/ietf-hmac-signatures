@@ -3,6 +3,7 @@
 const fetch = require('cross-fetch')
 const axios = require('axios')
 const http = require('http')
+const got = require('got')
 
 const { createSignRequest } = require('../src')
 
@@ -24,6 +25,28 @@ const options = {
   // constructSignatureString: (req, options) => {}, // Optional - Default constructSignatureString used if unspecified
   // constructDigestString: (req, options) => {}, // Optional - Default constructDigestString used if unspecified
 }
+
+;(async () => {
+  const signRequest = createSignRequest(options)
+
+  const request = {
+    url: 'http://localhost:3000/foo',
+    method: 'POST',
+    body: JSON.stringify({ hello: 'world' }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
+  const signedRequest = signRequest(request)
+
+  try {
+    const response = await got(signedRequest)
+    console.log(response.statusCode, response.statusMessage)
+  } catch (error) {
+    console.log(error.response.body)
+  }
+})()
 
 ;(async () => {
   try {
