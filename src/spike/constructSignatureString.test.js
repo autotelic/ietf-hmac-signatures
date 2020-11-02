@@ -1,14 +1,15 @@
 const { test } = require('tap')
-const constructSignatureHeader = require('./spike')
+const constructSignatureString = require('./constructSignatureString')
 
 const request = {
-  host: 'google.com',
+  url: 'https://google.com',
+  method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ hello: 'world' })
 }
 
 test('constructs the signature header', ({ done }) => {
-  const actual = constructSignatureHeader(request)
+  const actual = constructSignatureString(request)
   console.log('ACTUAL', actual)
   done()
 })
