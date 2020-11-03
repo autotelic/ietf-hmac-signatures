@@ -6,8 +6,6 @@ Methods to construct and verify HMAC signatures based on the [IETF draft standar
 
 ## Methods
 
-<!-- TODO(jeff-sexton): Add documentation for methods -->
-
 ### `createSignRequest`
 
 A method which returns a `signRequest` function. 
