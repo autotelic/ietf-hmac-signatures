@@ -14,12 +14,6 @@ const defaultOptions = {
   keyId: 'test-key-a',
   algorithmName: 'hs2019',
   signedHeaders: ['(request-target)', '(created)', '(expires)', 'host', 'digest', 'content-type']
-  // expiryOffset: 300, // Optional - Default is 300 seconds (5 min) if unspecified
-  // digestEncoding: 'base64', // Optional - Default is base64 if unspecified
-  // digestAlgorithm: 'sha-512' // Optional - Default is sha-512 if unspecified
-  // getAlgorithm: (req, options) => 'sha512', // Optional - Default getAlgorithm used if unspecified
-  // constructSignatureString: (req, options) => {}, // Optional - Default constructSignatureString used if unspecified
-  // constructDigestString: (req, options) => {}, // Optional - Default constructDigestString used if unspecified
 }
 
 const defaultReq = {

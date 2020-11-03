@@ -20,7 +20,6 @@ const defaultRequest = {
   method: 'GET'
 }
 
-// TODO(jeff-sexton): Add more tests to get to 100%
 test('Constructs a signature string from the incoming request', async ({
   equal
 }) => {
