@@ -29,7 +29,7 @@ module.exports = function constructSignatureString (request, opts) {
     fields
   } = opts
   const signedHeaders = fields.reduce(signatureHeaderInputReducer, '').trim()
-  const signature = constructSignature(secret, signedHeaders)
+  const signature = constructSignature(secret, algorithm, signedHeaders)
   const headerField = joinField(HEADERS_FIELD_PREFIX, fields.reduce(headerFieldReducer, '').trim())
   const keyIdField = joinField(KEY_ID_FIELD_PREFIX, keyId)
   const algorithmField = joinField(ALGORITHM_FIELD_PREFIX, algorithm)

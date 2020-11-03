@@ -1,7 +1,9 @@
 const { test } = require('tap')
+
 const createSignedRequest = require('./index.js')
 const extractors = require('./extractors')
 const transformers = require('./transformers')
+const constructSignature = require('./constructSignature')
 const constructSignatureString = require('./constructSignatureString')
 
 test('the thing', ({ fail }) => {
@@ -10,6 +12,7 @@ test('the thing', ({ fail }) => {
     'Content-Type',
     'Digest'
   ]
+
   const opts = {
     secret: 'topsecret',
     keyId: 'testkey',
@@ -18,10 +21,7 @@ test('the thing', ({ fail }) => {
     extractors,
     transformers,
     constructSignatureString,
-    constructSignature: (secret, input) => {
-      console.log('INPUT', input)
-      return 'askdjnasdijfnsdlijn++nsdkfnakl'
-    }
+    constructSignature
   }
 
   const request = {

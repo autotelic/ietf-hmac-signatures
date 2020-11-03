@@ -1,4 +1,3 @@
-
 function defaultTransformer (key, value) {
   return [key, value]
 }
