@@ -1,2 +1,7 @@
 'use strict'
-module.exports = { testMessage: 'Hello World' }
+
+const createSignRequest = require('./createSignRequest')
+
+module.exports = {
+  createSignRequest
+}
