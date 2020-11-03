@@ -69,3 +69,72 @@ test('Returns a request object with added signature headers', async ({
     same(createSignRequest(options)(input), expected, description)
   })
 })
+
+test('Throws errors when required options are not provided', async ({
+  throws
+}) => {
+  const tests = [
+    {
+      description: 'No keyId provided',
+      input: {
+        ...defaultReq
+      },
+      options: {
+        ...defaultOptions,
+        keyId: null
+      },
+      expected: new Error(
+        'keyId in options object is missing or not a string'
+      )
+    },
+    {
+      description: 'No algorithmName provided',
+      input: {
+        ...defaultReq
+      },
+      options: {
+        ...defaultOptions,
+        algorithmName: null
+      },
+      expected: new Error(
+        'algorithmName in options object is missing or not a string'
+      )
+    },
+    {
+      description: 'signedHeaders is not an array',
+      input: {
+        ...defaultReq
+      },
+      options: {
+        ...defaultOptions,
+        signedHeaders: null
+      },
+      expected: new Error(
+        'signedHeaders must be an array with at least one value'
+      )
+    },
+    {
+      description: 'signedHeaders array is empty',
+      input: {
+        ...defaultReq
+      },
+      options: {
+        ...defaultOptions,
+        signedHeaders: []
+      },
+      expected: new Error(
+        'signedHeaders must be an array with at least one value'
+      )
+    }
+  ]
+
+  tests.forEach(({ description, input, options, expected }) => {
+    throws(
+      function () {
+        createSignRequest(options)(input)
+      },
+      expected,
+      description
+    )
+  })
+})

@@ -31,10 +31,23 @@ test('Constructs a signature string from the incoming request', async ({
       input: defaultRequest,
       options: {
         ...defaultOptions,
-        created: 1602801824,
-        signedHeaders: ['(request-target)', '(created)', 'host']
+        created: 1602801700,
+        expires: 1602802000,
+        signedHeaders: ['(request-target)', '(created)', '(expires)', 'host']
       },
-      expected: 'X5qfidm9z3hkC1tf8A3xb8OEOEYNkjkMNPUA/uUBjBsXJWqLmZ/RBOcCj3hSuUsEjEztFJ+5Nxu6EOhcgNCB2g=='
+      expected: 'vBPsqo25Dk8r6FIan068bROJ9tygnnLx+6Vz8W7mORW6CPMVoewfMoswxbRQYxuxYhVTo5a7ns3PTufQfsvGWQ=='
+    },
+    {
+      description:
+        'Matching signature constructed when signedHeaders do not have brackets',
+      input: defaultRequest,
+      options: {
+        ...defaultOptions,
+        created: 1602801700,
+        expires: 1602802000,
+        signedHeaders: ['request-target', 'created', 'expires', 'host']
+      },
+      expected: 'vBPsqo25Dk8r6FIan068bROJ9tygnnLx+6Vz8W7mORW6CPMVoewfMoswxbRQYxuxYhVTo5a7ns3PTufQfsvGWQ=='
     },
     {
       description:

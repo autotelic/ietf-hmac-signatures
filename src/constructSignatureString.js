@@ -24,7 +24,7 @@ const constructSignatureString = (req, options) => {
 
 const getMessage = (req, options) => {
   const { signedHeaders, created, expires } = options
-  const { headers, method, url } = req
+  const { headers = {}, method, url } = req
   const parsedUrl = new URL(url)
 
   // Format Header Object keys to be lower case for compatibility
@@ -36,11 +36,14 @@ const getMessage = (req, options) => {
   return signedHeaders
     .map((signatureHeader) => {
       switch (signatureHeader.toLowerCase()) {
-        case '(request-target)' || 'request-target':
+        case '(request-target)':
+        case 'request-target':
           return `(request-target): ${method.toLowerCase()} ${parsedUrl.pathname + parsedUrl.search}`
-        case '(created)' || 'created':
+        case '(created)':
+        case 'created':
           return `(created): ${parseInt(created)}`
-        case '(expires)' || 'expires':
+        case '(expires)':
+        case 'expires':
           return `(expires): ${parseInt(expires)}`
         case 'host':
           return `host: ${parsedUrl.host}`
