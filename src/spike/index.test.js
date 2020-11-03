@@ -5,6 +5,7 @@ const extractors = require('./extractors')
 const transformers = require('./transformers')
 const constructSignature = require('./constructSignature')
 const constructSignatureString = require('./constructSignatureString')
+const outputHandler = require('./outputHandler')
 
 test('the thing', ({ fail }) => {
   const signatureFields = [
@@ -21,7 +22,8 @@ test('the thing', ({ fail }) => {
     extractors,
     transformers,
     constructSignatureString,
-    constructSignature
+    constructSignature,
+    outputHandler
   }
 
   const request = {

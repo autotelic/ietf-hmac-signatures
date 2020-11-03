@@ -6,7 +6,7 @@ module.exports = function createRequestSigner (opts) {
     extractors,
     signatureFields,
     transformers,
-    addDigestHeader = true,
+    outputHandler,
     ...restOpts
   } = opts
   return function requestSigner (request) {
@@ -17,16 +17,11 @@ module.exports = function createRequestSigner (opts) {
       transformers
     )).filter(([, value]) => value)
 
-    if (addDigestHeader) {
-      const [, digest] = fields.find(([key, value]) => key === 'digest')
-      request.headers.Digest = digest
-    }
-
     const signature = constructSignatureString(request, {
       ...restOpts,
       fields
     })
-    request.headers.Signature = signature
-    return request
+
+    return outputHandler(request, fields, signature)
   }
 }
