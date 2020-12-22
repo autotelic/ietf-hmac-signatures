@@ -1,40 +1,45 @@
 const { test } = require('tap')
 
-const createSignedRequest = require('./index.js')
-const extractors = require('./extractors')
-const transformers = require('./transformers')
-const constructSignature = require('./constructSignature')
-const constructSignatureString = require('./constructSignatureString')
-const outputHandler = require('./outputHandler')
+const createSignedRequest = require('.')
 
-test('the thing', ({ fail }) => {
+test('createSignedRequest', async ({ same }) => {
   const signatureFields = [
     '(request-target)',
-    'Content-Type',
-    'Digest'
+    '(created)',
+    '(expires)',
+    'Host',
+    'Digest',
+    'Content-Type'
   ]
 
   const opts = {
-    secret: 'topsecret',
-    keyId: 'testkey',
-    algorithm: 'sha512',
-    signatureFields,
-    extractors,
-    transformers,
-    constructSignatureString,
-    constructSignature,
-    outputHandler
+    secret: 'topSecret',
+    keyId: 'test-key-a',
+    signatureFields
   }
 
   const request = {
-    url: 'https://google.com',
+    url: 'http://localhost:3000/foo',
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ hello: 'world' })
+    body: JSON.stringify({ hello: 'world' }),
+    headers: {
+      Date: 1602872645,
+      'Content-Type': 'application/json'
+    }
   }
 
   const signRequest = createSignedRequest(opts)
   const actual = signRequest(request)
-  console.log(actual)
-  fail()
+  const expected = {
+    url: 'http://localhost:3000/foo',
+    method: 'POST',
+    body: JSON.stringify({ hello: 'world' }),
+    headers: {
+      Date: 1602872645,
+      'Content-Type': 'application/json',
+      Digest: 'sha-512=+PtokCNHosgo04ww4cNhd4yJxhMjLzWjDAKtKwQZDT4Ef9v/PrS/+BQLX4IX5dZkUMK/tQo7Uyc68RkhNyCZVg==',
+      Signature: 'keyId="test-key-a", algorithm="hs2019", headers="(request-target) (created) (expires) host digest content-type", signature="HFIn7RU3zvfFHeyOjsRlMzUQ18prW+KE61ikKKKoyAlcxGUdlBF/sruA+VznOhQNlWh3J4y3tZc8aDa0TxRBEg=="'
+    }
+  }
+  same(actual, expected)
 })

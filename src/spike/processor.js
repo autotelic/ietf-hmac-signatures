@@ -1,5 +1,5 @@
 function defaultTransformer (key, value) {
-  return [key, value]
+  return [key.toLowerCase(), value]
 }
 
 module.exports = function processor (request, field, extractors, transformers) {

@@ -4,6 +4,7 @@ const {
   KEY_ID_FIELD_PREFIX,
   ALGORITHM_FIELD_PREFIX,
   DELIMITER,
+  NEWLINE,
   SPACE,
   COMMA
 } = require('./constants')
@@ -17,7 +18,7 @@ function headerFieldReducer (accumulator, [key]) {
 };
 
 function signatureHeaderInputReducer (accumulator, [key, value]) {
-  return accumulator.concat(key, DELIMITER, value, SPACE)
+  return accumulator.concat(key, DELIMITER, value, NEWLINE)
 };
 
 module.exports = function constructSignatureString (request, opts) {
@@ -26,10 +27,12 @@ module.exports = function constructSignatureString (request, opts) {
     constructSignature,
     keyId,
     algorithm,
+    signingAlgorithm,
     fields
   } = opts
+
   const signedHeaders = fields.reduce(signatureHeaderInputReducer, '').trim()
-  const signature = constructSignature(secret, algorithm, signedHeaders)
+  const signature = constructSignature(secret, signingAlgorithm, signedHeaders)
   const headerField = joinField(HEADERS_FIELD_PREFIX, fields.reduce(headerFieldReducer, '').trim())
   const keyIdField = joinField(KEY_ID_FIELD_PREFIX, keyId)
   const algorithmField = joinField(ALGORITHM_FIELD_PREFIX, algorithm)

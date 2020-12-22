@@ -1,6 +1,11 @@
 const processor = require('./processor')
+const defaultOpts = require('./defaultOpts')
 
-module.exports = function createRequestSigner (opts) {
+module.exports = function createRequestSigner (options) {
+  const opts = {
+    ...defaultOpts,
+    ...options
+  }
   const {
     constructSignatureString,
     extractors,
