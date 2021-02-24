@@ -3,6 +3,8 @@ const {
   SIGNATURE_FIELD_PREFIX,
   KEY_ID_FIELD_PREFIX,
   ALGORITHM_FIELD_PREFIX,
+  CREATED_FIELD_PREFIX,
+  EXPIRES_FIELD_PREFIX,
   DELIMITER,
   NEWLINE,
   SPACE,
@@ -38,10 +40,17 @@ module.exports = function constructSignatureString (request, opts) {
   const algorithmField = joinField(ALGORITHM_FIELD_PREFIX, algorithm)
   const signatureField = joinField(SIGNATURE_FIELD_PREFIX, signature)
 
+  const createdFieldResult = fields.find(([key]) => key === '(created)')
+  const expiresFieldResult = fields.find(([key]) => key === '(expires)')
+  const createdField = createdFieldResult ? joinField(CREATED_FIELD_PREFIX, createdFieldResult[1]) : null
+  const expiresField = expiresFieldResult ? joinField(EXPIRES_FIELD_PREFIX, expiresFieldResult[1]) : null
+
   return [
     keyIdField,
     algorithmField,
     headerField,
-    signatureField
-  ].join(COMMA).trim()
+    signatureField,
+    createdField,
+    expiresField
+  ].filter((field) => field).join(COMMA).trim()
 }
