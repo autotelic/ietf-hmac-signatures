@@ -1,5 +1,5 @@
 const { createHash } = require('crypto')
-const { BASE_64, SHA_512, SHA_512_PREFIX } = require('./constants')
+const { BASE_64, SHA_512, SHA_512_PREFIX } = require('../../../constants')
 
 module.exports = {
   Digest: (key, value) => [

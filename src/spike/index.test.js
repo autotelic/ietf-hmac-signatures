@@ -94,7 +94,7 @@ test('createSignedRequest - allows a user to override the extractors', async ({ 
     'Content-Length'
   ]
 
-  const defaultExtractors = require('./extractors')
+  const defaultExtractors = require('./defaults/versions/v00/extractors')
 
   const opts = {
     secret: 'topSecret',

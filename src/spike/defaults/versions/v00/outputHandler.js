@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = function outputHandler (request, fields, signature) {
   const [, digest] = fields.find(([key, value]) => key === 'digest') || []
   if (digest) {
