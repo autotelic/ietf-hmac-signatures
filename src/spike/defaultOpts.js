@@ -1,13 +1,13 @@
-const extractors = require('./extractors')
-const transformers = require('./transformers')
-const constructSignature = require('./constructSignature')
-const constructSignatureString = require('./constructSignatureString')
-const outputHandler = require('./outputHandler')
+'use strict'
 
-const signatureFields = [
-  '(request-target)',
-  'Date'
-]
+const {
+  constructSignature,
+  constructSignatureString,
+  outputHandler,
+  transformers,
+  extractors,
+  signatureFields
+} = require('./defaults/versions/latest')
 
 module.exports = {
   algorithm: 'hs2019',

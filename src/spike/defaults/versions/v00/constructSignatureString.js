@@ -1,14 +1,18 @@
+'use strict'
+
+const {
+  DELIMITER,
+  NEWLINE,
+  SPACE,
+  COMMA
+} = require('../../../constants')
 const {
   HEADERS_FIELD_PREFIX,
   SIGNATURE_FIELD_PREFIX,
   KEY_ID_FIELD_PREFIX,
   ALGORITHM_FIELD_PREFIX,
   CREATED_FIELD_PREFIX,
-  EXPIRES_FIELD_PREFIX,
-  DELIMITER,
-  NEWLINE,
-  SPACE,
-  COMMA
+  EXPIRES_FIELD_PREFIX
 } = require('./constants')
 
 function joinField (key, value) {

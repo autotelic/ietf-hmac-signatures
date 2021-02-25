@@ -1,6 +1,6 @@
 const urlParseLax = require('url-parse-lax')
 
-const { SPACE, EXPIRATION_OFFSET } = require('./constants')
+const { SPACE, EXPIRATION_OFFSET } = require('../../../constants')
 
 module.exports = {
   '(request-target)': (req) => {
