@@ -1,7 +1,32 @@
-'use strict'
+const processor = require('./processor')
+const defaultOpts = require('./defaultOpts')
 
-const createSignRequest = require('./createSignRequest')
+module.exports = function createRequestSigner (options) {
+  const opts = {
+    ...defaultOpts,
+    ...options
+  }
+  const {
+    constructSignatureString,
+    extractors,
+    signatureFields,
+    transformers,
+    outputHandler,
+    ...restOpts
+  } = opts
+  return function requestSigner (request) {
+    const fields = signatureFields.map((field) => processor(
+      request,
+      field,
+      extractors,
+      transformers
+    )).filter(([, value]) => value)
 
-module.exports = {
-  createSignRequest
+    const signature = constructSignatureString(request, {
+      ...restOpts,
+      fields
+    })
+
+    return outputHandler(request, fields, signature)
+  }
 }
