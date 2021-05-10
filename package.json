@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/autotelic/ietf-hmac-signatures#readme",
   "devDependencies": {
+    "got": "^11.8.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
     "standard": "^14.3.4",
