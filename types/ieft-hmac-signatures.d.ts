@@ -19,5 +19,6 @@
 // export default fastifyOpenTelemetry
 
 declare module '@autotelic/ietf-hmac-signatures' {
-    const noTypesYet: any;
-    export default noTypesYet;}
+    const noTypesYet: any
+    export default noTypesYet
+  }
