@@ -1,3 +1,13 @@
+import { SignatureOptions } from '.'
+import { expectType } from 'tsd'
+
+// should be able to construct an empty options object
+expectType(<SignatureOptions>({}))
+
+// should be able to construct a partial options object
+// should be able to construct a full options object
+
+
 // import { OpenTelemetryPluginOptions, OpenTelemetryReqInstance } from '../../fastify-opentelemetry'
 // import fastify, { FastifyRequest } from 'fastify'
 // import { expectType } from 'tsd'

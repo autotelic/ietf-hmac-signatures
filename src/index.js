@@ -1,7 +1,28 @@
 const processor = require('./processor')
 const defaultOpts = require('./defaultOpts')
 
-module.exports = function createRequestSigner (options) {
+/**
+ * Signer Options
+ * @typedef {Object} SignatureOptions
+ * @property {string} secret - The name of the employee.
+ * @property {string} keyId - The employee's department.
+ * @property {string[]} signatureFields - The employee's department.
+ */
+
+/**
+ * Request Options with Url
+ * @typedef {Object} RequestObject
+ * @property {string} url - The name of the employee.
+ * @property {string} method -
+ * @property {string} body -
+ * @property {Object} headers -
+ */
+
+/**
+ *
+ * @param {SignatureOptions} options - The employee who is responsible for the project.
+ */
+function createRequestSigner (options) {
   const opts = {
     ...defaultOpts,
     ...options
@@ -14,7 +35,12 @@ module.exports = function createRequestSigner (options) {
     outputHandler,
     ...restOpts
   } = opts
-  return function requestSigner (request) {
+
+  /**
+    * @param {RequestObject} request - The employee who is responsible for the project.
+    * @returns {RequestObject}
+   */
+  function requestSigner (request) {
     const fields = signatureFields.map((field) => processor(
       request,
       field,
@@ -29,4 +55,8 @@ module.exports = function createRequestSigner (options) {
 
     return outputHandler(request, fields, signature)
   }
+
+  return requestSigner
 }
+
+module.exports = createRequestSigner

@@ -4,13 +4,15 @@
   "description": "Methods to construct and verify HMAC signatures based on the IETF draft standard",
   "main": "src/index.js",
   "files": [
-    "types/ieft-hmac-signatures.d.ts"
+    "types/index.d.ts"
   ],
-  "types": "types/ieft-hmac-signatures.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
-    "test": "tap -R classic -j1 --100 && tsd",
-    "lint": "eslint .",
-    "fix": "standard --fix"
+    "test": "tap -R classic -j1 --100 && npm run tsc:test",
+    "lint": "standard",
+    "fix": "standard --fix",
+    "tsc": "tsc",
+    "tsc:test": "tsc && tsd"
   },
   "repository": {
     "type": "git",
@@ -31,16 +33,12 @@
   "homepage": "https://github.com/autotelic/ietf-hmac-signatures#readme",
   "devDependencies": {
     "@types/node": "^15.3.1",
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
-    "eslint": "^7.13.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-standard": "^5.0.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
     "standard": "^14.3.4",
     "tap": "^14.10.8",
-    "tsd": "^0.15.1"
+    "tsd": "^0.15.1",
+    "typescript": "^3.9.7"
   },
   "husky": {
     "hooks": {

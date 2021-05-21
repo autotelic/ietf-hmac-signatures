@@ -1,0 +1,10 @@
+export declare const DELIMITER: string;
+export declare const SPACE: string;
+export declare const COMMA: string;
+export declare const NEWLINE: string;
+export declare const BASE_64: string;
+export declare const SHA_256: string;
+export declare const SHA_256_PREFIX: string;
+export declare const SHA_512: string;
+export declare const SHA_512_PREFIX: string;
+export declare const EXPIRATION_OFFSET: number;
