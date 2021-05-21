@@ -2,24 +2,26 @@ const processor = require('./processor')
 const defaultOpts = require('./defaultOpts')
 
 /**
- * Signer Options
+ * Signer Options Type
  * @typedef {Object} SignatureOptions
- * @property {string} secret - The name of the employee.
- * @property {string} keyId - The employee's department.
- * @property {string[]} signatureFields - The employee's department.
+ * @property {string} secret - The shared secret used to sign the signature
+ * @property {string} keyId - The keyId to include as part of the signature metadata
+ * @property {string[]} signatureFields - An array of references to the desired signature material
  */
 
 /**
- * Request Options with Url
+ * Request Options Type
  * @typedef {Object} RequestObject
- * @property {string} url - The name of the employee.
- * @property {string} method -
- * @property {string} body -
- * @property {Object} headers -
+ * @property {string} url - The full url of the request to sign
+ * @property {string} method - The method of the request to sign
+ * @property {string} body - The stringified body of the request to sign
+ * @property {Object} headers - A headers object containing any request values that will be part of the signature material
  */
 
 /**
+ * createRequestSigner function
  *
+ * Returns a requestSigner function initialized with the necessary signature options
  * @param {SignatureOptions} options - The employee who is responsible for the project.
  */
 function createRequestSigner (options) {
@@ -37,8 +39,12 @@ function createRequestSigner (options) {
   } = opts
 
   /**
-    * @param {RequestObject} request - The employee who is responsible for the project.
-    * @returns {RequestObject}
+    * requestSigner function
+    *
+    * Returned by createRequestSigner function.
+    * Accepts a request object and returns the same object with a Signature header generated according to the signatureOptions
+    * @param {RequestObject} request - The Request object to sign
+    * @returns {RequestObject} - The Request object with an added Signature header
    */
   function requestSigner (request) {
     const fields = signatureFields.map((field) => processor(
