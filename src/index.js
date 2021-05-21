@@ -6,7 +6,15 @@ const defaultOpts = require('./defaultOpts')
  * @typedef {Object} SignatureOptions
  * @property {string} secret - The shared secret used to sign the signature
  * @property {string} keyId - The keyId to include as part of the signature metadata
- * @property {string[]} signatureFields - An array of references to the desired signature material
+ * @property {string[]} [signatureFields] - An array of references to the desired signature material
+ * @property {string} [algorithm='hs2019'] - The IETF algorithm name to use e.g. 'hs2019'
+ * @property {string} [signingAlgorithm='sha512'] - The signing algorithm to use when constructing the signature e.g. 'sha512',
+ // TODO(jeff-sexton): Add jsdoc property defs for the following:
+  extractors,
+  transformers,
+  constructSignatureString,
+  constructSignature,
+  outputHandler
  */
 
 /**
@@ -15,7 +23,7 @@ const defaultOpts = require('./defaultOpts')
  * @property {string} url - The full url of the request to sign
  * @property {string} method - The method of the request to sign
  * @property {string} body - The stringified body of the request to sign
- * @property {Object} headers - A headers object containing any request values that will be part of the signature material
+ * @property {Object.<string, string | string[] | number >} headers - A headers object containing any request values that will be part of the signature material
  */
 
 /**
