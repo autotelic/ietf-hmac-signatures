@@ -21,7 +21,7 @@ expectType(<RequestObject>({
     body: JSON.stringify({ hello: 'world' }),
     headers: {
         foo: 'bar',
-        biz: 5,
+        biz: 'baz',
     }
 }))
 

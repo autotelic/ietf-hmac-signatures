@@ -23,7 +23,7 @@ const defaultOpts = require('./defaultOpts')
  * @property {string} url - The full url of the request to sign
  * @property {string} method - The method of the request to sign
  * @property {string} body - The stringified body of the request to sign
- * @property {Object.<string, string | string[] | number >} headers - A headers object containing any request values that will be part of the signature material
+ * @property {Record<string, string>} headers - A headers object containing any request values that will be part of the signature material
  */
 
 /**
