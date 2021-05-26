@@ -4,6 +4,7 @@
   "description": "Methods to construct and verify HMAC signatures based on the IETF draft standard",
   "main": "src/index.js",
   "files": [
+    "src",
     "types/index.d.ts"
   ],
   "types": "types/index.d.ts",
