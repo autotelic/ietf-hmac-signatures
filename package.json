@@ -1,6 +1,6 @@
 {
   "name": "@autotelic/ietf-hmac-signatures",
-  "version": "0.1.0-next.0",
+  "version": "0.1.0-next.1",
   "description": "Methods to construct and verify HMAC signatures based on the IETF draft standard",
   "main": "src/index.js",
   "files": [
